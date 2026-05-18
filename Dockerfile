@@ -5,9 +5,9 @@ WORKDIR /src
 
 COPY . .
 
-RUN dotnet restore "ProjectPortal/ProjectPortal.csproj"
+RUN dotnet restore "ProjectPortal.csproj"
 
-RUN dotnet publish "ProjectPortal/ProjectPortal.csproj" -c Release -o /app/publish
+RUN dotnet publish "ProjectPortal.csproj" -c Release -o /app/publish
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
