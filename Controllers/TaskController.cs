@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectPortal.DTOs;
 
-namespace ProjectPortal.Controller;
+namespace ProjectPortal.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
