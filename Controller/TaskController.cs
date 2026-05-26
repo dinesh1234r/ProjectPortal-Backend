@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ProjectPortal.DTOs;
 
 namespace ProjectPortal.Controller;
 
@@ -6,9 +7,21 @@ namespace ProjectPortal.Controller;
 [Route("api/[controller]")]
 public class TaskController : ControllerBase
 {
-    [HttpGet]
-    public IActionResult Get()
+    [HttpPost("createTask")]
+    public IActionResult CreateTask(CreateTaskDto createTaskDto)
     {
-        return Ok("Hello World");
+        return Ok(createTaskDto);
+    }
+
+    [HttpPut("updateTask/{id}")]
+    public IActionResult UpdateTask(int id,UpdateTaskDto updateTaskDto)
+    {
+        return Ok(updateTaskDto);   
+    }
+    
+    [HttpDelete("deleteTask/{id}")]
+    public IActionResult DeleteTask(int id)
+    {
+        return Ok(id);
     }
 }
