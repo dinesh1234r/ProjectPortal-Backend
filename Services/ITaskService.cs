@@ -1,6 +1,6 @@
 using ProjectPortal.Models;
 
-namespace ProjectPortal.Service;
+namespace ProjectPortal.Services;
 
 public interface ITaskService
 {

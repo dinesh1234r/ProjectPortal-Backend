@@ -1,7 +1,7 @@
 using ProjectPortal.Models;
 using ProjectPortal.Repository;
 
-namespace ProjectPortal.Service.Impl;
+namespace ProjectPortal.Services.Impl;
 
 public class TaskService(ITaskRepository taskRepository) : ITaskService
 {
