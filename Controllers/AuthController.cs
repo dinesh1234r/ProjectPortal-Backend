@@ -20,7 +20,8 @@ public class AuthController(AppDbContext context,JwtService jwtService) : Contro
         {
             Name = dto.Name,
             Email = dto.Email,
-            PasswordHash = hashedPassword
+            PasswordHash = hashedPassword,
+            Role = dto.Role
         };
 
         context.Users.Add(user);

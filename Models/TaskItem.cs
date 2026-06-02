@@ -10,7 +10,13 @@ public class TaskItem
     
     public bool IsCompleted { get; set; } = false;
     
+    public int ProjectId { get; set; }
+
+    public Project Project { get; set; } = null!;
+    
     public int? AssignedUserId { get; set; }
+    
+    public User? AssignedUser { get; set; }
     
     public DateTime CreatedAt { get; set; }
 }
