@@ -1,0 +1,15 @@
+using AutoMapper;
+using ProjectPortal.DTOs;
+using ProjectPortal.Models;
+
+namespace ProjectPortal.Mappings;
+
+public class MappingProfile : Profile
+{
+    public MappingProfile()
+    {
+        CreateMap<CreateTaskDto, TaskItem>();
+
+        CreateMap<UpdateTaskDto, TaskItem>();
+    }
+}

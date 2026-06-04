@@ -1,8 +1,15 @@
+using ProjectPortal.DTOs;
 using ProjectPortal.Models;
 
 namespace ProjectPortal.Services;
 
 public interface ITaskService
 {
-    public Task<TaskItem> CreateTask(TaskItem taskItem);
+    Task<TaskItem> CreateAsync(CreateTaskDto dto);
+
+    Task<TaskItem> UpdateAsync(
+        int id,
+        UpdateTaskDto dto);
+
+    Task DeleteAsync(int id);
 }

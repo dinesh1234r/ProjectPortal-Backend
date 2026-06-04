@@ -4,8 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AutoMapper;
 using Microsoft.OpenApi.Models;
+using ProjectPortal.Mappings;
+using ProjectPortal.Repository;
+using ProjectPortal.Repository.Impl;
 using ProjectPortal.Services;
+using ProjectPortal.Services.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,6 +81,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<ITaskRepository,TaskRepository>();
+builder.Services.AddScoped<ITaskService,TaskService>();
+builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
+builder.Services.AddScoped<IProjectService,ProjectService>();
+builder.Services.AddAutoMapper(
+    typeof(MappingProfile));
 
 var app = builder.Build();
 
