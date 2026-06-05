@@ -2,7 +2,7 @@ namespace ProjectPortal.DTOs;
 
 public class UpdateTaskDto
 {
-    public int Title { get; set; }
+    public string Title { get; set; }
     
     public string Description { get; set; } = string.Empty;
     

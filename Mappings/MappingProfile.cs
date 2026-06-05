@@ -11,5 +11,9 @@ public class MappingProfile : Profile
         CreateMap<CreateTaskDto, TaskItem>();
 
         CreateMap<UpdateTaskDto, TaskItem>();
+        
+        CreateMap<CreateProjectDto, Project>();
+        
+        CreateMap<UpdateProjectDto, Project>();
     }
 }
