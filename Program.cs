@@ -91,6 +91,7 @@ builder.Services.AddAutoMapper(
     typeof(MappingProfile));
 builder.Services
     .AddGraphQLServer()
+    .AddAuthorization()
     .AddQueryType<ProjectQuery>()
     .AddFiltering()
     .AddSorting()

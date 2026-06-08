@@ -1,10 +1,10 @@
-using HotChocolate;
-using ProjectPortal.Data;
+using HotChocolate.Authorization;
 using ProjectPortal.Models;
 using ProjectPortal.Services;
 
 namespace ProjectPortal.GraphQL;
 
+[Authorize]
 public class ProjectQuery
 {
     [UseProjection]
