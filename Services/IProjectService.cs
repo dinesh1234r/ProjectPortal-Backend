@@ -12,4 +12,6 @@ public interface IProjectService
         UpdateProjectDto dto);
 
     Task DeleteAsync(int id);
+    
+    IQueryable<Project> GetAll();
 }

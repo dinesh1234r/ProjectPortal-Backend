@@ -1,13 +1,17 @@
 using HotChocolate;
 using ProjectPortal.Data;
 using ProjectPortal.Models;
+using ProjectPortal.Services;
 
 namespace ProjectPortal.GraphQL;
 
 public class ProjectQuery
 {
-    public IQueryable<Project> GetProject([Service] AppDbContext context)
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<Project> GetProject([Service] IProjectService projectService)
     {
-        return context.Projects;
+        return projectService.GetAll();
     }
 }

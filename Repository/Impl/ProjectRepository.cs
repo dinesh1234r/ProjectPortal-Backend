@@ -35,4 +35,9 @@ public class ProjectRepository(AppDbContext context)
 
         await context.SaveChangesAsync();
     }
+    
+    public IQueryable<Project> GetAll()
+    {
+        return context.Projects.AsNoTracking();
+    }
 }

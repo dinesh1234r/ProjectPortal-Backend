@@ -47,4 +47,9 @@ public class ProjectService(
 
         await projectRepository.DeleteAsync(project);
     }
+    
+    public IQueryable<Project> GetAll()
+    {
+        return projectRepository.GetAll();
+    }
 }
