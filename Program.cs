@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.OpenApi.Models;
+using ProjectPortal.GraphQL;
 using ProjectPortal.Mappings;
 using ProjectPortal.Repository;
 using ProjectPortal.Repository.Impl;
@@ -88,6 +89,9 @@ builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
 builder.Services.AddScoped<IProjectService,ProjectService>();
 builder.Services.AddAutoMapper(
     typeof(MappingProfile));
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<ProjectQuery>();
 
 
 
@@ -109,6 +113,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
+app.MapGraphQL();
 app.Run();
 
