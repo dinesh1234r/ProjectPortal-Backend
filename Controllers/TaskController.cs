@@ -1,3 +1,4 @@
+using Casbin.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectPortal.DTOs;
@@ -6,10 +7,12 @@ using ProjectPortal.Services;
 namespace ProjectPortal.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class TasksController(ITaskService taskService) : ControllerBase
 {
     [HttpPost]
+    [CasbinAuthorize("Task", "Create")]
     public async Task<IActionResult> CreateTask(
         [FromBody] CreateTaskDto dto)
     {
@@ -22,6 +25,7 @@ public class TasksController(ITaskService taskService) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [CasbinAuthorize("Task", "Update")]
     public async Task<IActionResult> UpdateTask(
         int id,
         [FromBody] UpdateTaskDto dto)
@@ -32,6 +36,7 @@ public class TasksController(ITaskService taskService) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [CasbinAuthorize("Task", "Delete")]
     public async Task<IActionResult> DeleteTask(int id)
     {
         await taskService.DeleteAsync(id);

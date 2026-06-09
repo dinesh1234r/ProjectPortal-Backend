@@ -96,7 +96,7 @@ builder.Services
     .AddFiltering()
     .AddSorting()
     .AddProjections();
-
+builder.Services.AddSingleton<AuthorizationService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

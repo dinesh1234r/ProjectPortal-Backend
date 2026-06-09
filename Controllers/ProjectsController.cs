@@ -1,3 +1,5 @@
+using Casbin.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectPortal.DTOs;
 using ProjectPortal.Services;
@@ -6,9 +8,11 @@ namespace ProjectPortal.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ProjectsController(IProjectService projectService) : ControllerBase
 {
     [HttpPost]
+    [CasbinAuthorize("Project", "Create")]
     public async Task<IActionResult> CreateProject(
         [FromBody] CreateProjectDto dto)
     {
@@ -21,6 +25,7 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [CasbinAuthorize("Project", "Update")]
     public async Task<IActionResult> UpdateProject(
         int id,
         [FromBody] UpdateProjectDto dto)
@@ -31,6 +36,7 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [CasbinAuthorize("Project", "Delete")]
     public async Task<IActionResult> DeleteProject(int id)
     {
         await projectService.DeleteAsync(id);

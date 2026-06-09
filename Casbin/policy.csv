@@ -1,0 +1,12 @@
+p, Admin, Project, Create
+p, Admin, Project, Update
+p, Admin, Project, Delete
+
+p, Manager, Task, Create
+p, Manager, Task, Update
+
+p, Employee, Project, Read
+p, Employee, Task, Read
+
+g, Admin, Manager
+g, Manager, Employee
