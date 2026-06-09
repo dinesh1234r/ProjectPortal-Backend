@@ -92,7 +92,8 @@ builder.Services.AddAutoMapper(
 builder.Services
     .AddGraphQLServer()
     .AddAuthorization()
-    .AddQueryType<ProjectQuery>()
+    .AddQueryType(d => d.Name("Query"))
+    .AddTypeExtension<ProjectQuery>()
     .AddFiltering()
     .AddSorting()
     .AddProjections();
