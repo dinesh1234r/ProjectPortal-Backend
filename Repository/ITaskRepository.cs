@@ -11,4 +11,6 @@ public interface ITaskRepository
     Task UpdateAsync(TaskItem task);
 
     Task DeleteAsync(TaskItem task);
+    
+    IQueryable<TaskItem> GetAll();
 }

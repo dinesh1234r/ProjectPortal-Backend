@@ -53,4 +53,8 @@ public class TaskService(ITaskRepository taskRepository,IMapper mapper) : ITaskS
         await taskRepository.DeleteAsync(task);
     }
 
+    public IQueryable<TaskItem> GetAll()
+    {
+        return taskRepository.GetAll();
+    }
 }

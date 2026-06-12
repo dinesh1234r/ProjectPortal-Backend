@@ -34,4 +34,9 @@ public class TaskRepository(AppDbContext _context) : ITaskRepository
 
         await _context.SaveChangesAsync();
     }
+    
+    public IQueryable<TaskItem> GetAll()
+    {
+        return _context.TaskItems.AsNoTracking();
+    }
 }

@@ -12,4 +12,6 @@ public interface ITaskService
         UpdateTaskDto dto);
 
     Task DeleteAsync(int id);
+    
+    IQueryable<TaskItem> GetAll();
 }

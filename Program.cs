@@ -94,6 +94,7 @@ builder.Services
     .AddAuthorization()
     .AddQueryType(d => d.Name("Query"))
     .AddTypeExtension<ProjectQuery>()
+    .AddTypeExtension<TaskQuery>()
     .AddFiltering()
     .AddSorting()
     .AddProjections();
