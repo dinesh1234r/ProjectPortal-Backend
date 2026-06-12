@@ -87,6 +87,8 @@ builder.Services.AddScoped<ITaskRepository,TaskRepository>();
 builder.Services.AddScoped<ITaskService,TaskService>();
 builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
 builder.Services.AddScoped<IProjectService,ProjectService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAutoMapper(
     typeof(MappingProfile));
 builder.Services
@@ -95,6 +97,7 @@ builder.Services
     .AddQueryType(d => d.Name("Query"))
     .AddTypeExtension<ProjectQuery>()
     .AddTypeExtension<TaskQuery>()
+    .AddTypeExtension<UserQuery>()
     .AddFiltering()
     .AddSorting()
     .AddProjections();

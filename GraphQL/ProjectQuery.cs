@@ -14,7 +14,7 @@ public class ProjectQuery
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<Project> GetProject(ClaimsPrincipal user,[Service] AuthorizationService authorizationService,
+    public IQueryable<Project> GetProjects(ClaimsPrincipal user,[Service] AuthorizationService authorizationService,
         [Service] IProjectService projectService)
     {
         GraphQLAuthorizationHelper.Authorize(

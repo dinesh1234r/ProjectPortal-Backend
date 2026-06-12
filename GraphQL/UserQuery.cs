@@ -6,13 +6,14 @@ namespace ProjectPortal.GraphQL;
 
 [Authorize]
 [ExtendObjectType("Query")]
-public class TaskQuery
+public class UserQuery
 {
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<TaskItem> GetTasks([Service] ITaskService taskService)
+    public IQueryable<User> GetUsers(
+        [Service] IUserService userService)
     {
-        return taskService.GetAll();
+        return userService.GetAll();
     }
 }
