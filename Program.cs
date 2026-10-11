@@ -130,6 +130,7 @@ builder.Services
     .AddTypeExtension<ProjectQuery>()
     .AddTypeExtension<TaskQuery>()
     .AddTypeExtension<UserQuery>()
+    .AddTypeExtension<AssignableUserQuery>()
     .AddFiltering()
     .AddSorting()
     .AddProjections();
