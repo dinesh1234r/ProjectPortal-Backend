@@ -9,19 +9,37 @@ namespace ProjectPortal.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(AppDbContext context,JwtService jwtService) : ControllerBase
+public class AuthController(
+    AppDbContext context,
+    JwtService jwtService
+) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+        var email = dto.Email.Trim();
+
+        var emailExists = await context.Users
+            .AnyAsync(user => user.Email == email);
+
+        if (emailExists)
+        {
+            return Conflict(new
+            {
+                message = "An account with this email already exists."
+            });
+        }
+
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(
+            dto.Password
+        );
 
         var user = new User
         {
-            Name = dto.Name,
-            Email = dto.Email,
+            Name = dto.Name.Trim(),
+            Email = email,
             PasswordHash = hashedPassword,
-            Role = dto.Role
+            Role = "Employee"
         };
 
         context.Users.Add(user);
@@ -33,6 +51,7 @@ public class AuthController(AppDbContext context,JwtService jwtService) : Contro
             message = "User registered successfully"
         });
     }
+
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
