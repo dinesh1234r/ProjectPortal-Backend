@@ -58,6 +58,16 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(databaseUrl));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -122,5 +132,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapGraphQL();
+app.UseCors("Frontend");
 app.Run();
 
