@@ -1,3 +1,4 @@
+
 using DotNetEnv;
 using ProjectPortal.Data;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,15 @@ var builder = WebApplication.CreateBuilder(args);
 Env.Load();
 
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+var frontendUrls = (
+    Environment.GetEnvironmentVariable("FRONTEND_URLS")
+    ?? "http://localhost:5173"
+).Split(
+    ',',
+    StringSplitOptions.RemoveEmptyEntries |
+    StringSplitOptions.TrimEntries
+);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -68,7 +78,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("Frontend", policy =>
     {
         policy
-            .WithOrigins("http://localhost:5173")
+            .WithOrigins(frontendUrls)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
