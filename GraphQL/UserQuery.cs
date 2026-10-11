@@ -4,7 +4,7 @@ using ProjectPortal.Services;
 
 namespace ProjectPortal.GraphQL;
 
-[Authorize]
+[Authorize(Roles = new[] { "Admin" })]
 [ExtendObjectType("Query")]
 public class UserQuery
 {

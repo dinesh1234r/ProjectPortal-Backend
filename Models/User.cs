@@ -1,3 +1,5 @@
+using HotChocolate;
+
 namespace ProjectPortal.Models;
 
 public class User
@@ -8,11 +10,13 @@ public class User
 
     public string Email { get; set; } = string.Empty;
 
+    [GraphQLIgnore]
     public string PasswordHash { get; set; } = string.Empty;
 
     public string Role { get; set; } = "Employee";
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    
-    public ICollection<TaskItem> TaskItems {get; set;}= new List<TaskItem>();
+
+    public ICollection<TaskItem> TaskItems { get; set; } =
+        new List<TaskItem>();
 }
