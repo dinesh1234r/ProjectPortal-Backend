@@ -73,6 +73,16 @@ public class UserService(
             throw new KeyNotFoundException("User not found.");
         }
 
+        if (string.Equals(
+            user.Role,
+            "Admin",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                "Admin accounts cannot be modified."
+            );
+        }
+
         user.Name = name;
         user.Role = role;
 
@@ -86,6 +96,16 @@ public class UserService(
         if (user == null)
         {
             throw new KeyNotFoundException("User not found.");
+        }
+
+        if (string.Equals(
+            user.Role,
+            "Admin",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                "Admin accounts cannot be deleted."
+            );
         }
 
         await userRepository.DeleteAsync(user);
