@@ -9,7 +9,9 @@ namespace ProjectPortal.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class ProjectsController(IProjectService projectService) : ControllerBase
+public class ProjectsController(
+    IProjectService projectService,
+    IActivityService activityService) : ControllerBase
 {
     [HttpPost]
     [CasbinAuthorize("Project", "Create")]
@@ -17,6 +19,9 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
         [FromBody] CreateProjectDto dto)
     {
         var project = await projectService.CreateAsync(dto);
+
+        await activityService.LogAsync(
+            User, "Created", "Project", project.Id, project.Name);
 
         return CreatedAtAction(
             nameof(CreateProject),
@@ -32,6 +37,9 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     {
         var project = await projectService.UpdateAsync(id, dto);
 
+        await activityService.LogAsync(
+            User, "Updated", "Project", project.Id, project.Name);
+
         return Ok(project);
     }
 
@@ -40,6 +48,9 @@ public class ProjectsController(IProjectService projectService) : ControllerBase
     public async Task<IActionResult> DeleteProject(int id)
     {
         await projectService.DeleteAsync(id);
+
+        await activityService.LogAsync(
+            User, "Deleted", "Project", id, $"Project #{id}");
 
         return NoContent();
     }

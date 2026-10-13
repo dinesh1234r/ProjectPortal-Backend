@@ -120,6 +120,7 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<AuthorizationService>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

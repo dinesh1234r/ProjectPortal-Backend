@@ -18,5 +18,7 @@ public class AppDbContext: DbContext
     public DbSet<Project> Projects { get; set; }    
     
     public DbSet<CasbinRule> CasbinRules { get; set; }   
+    
+    public DbSet<ActivityLog> ActivityLogs { get; set; }
 }
 
