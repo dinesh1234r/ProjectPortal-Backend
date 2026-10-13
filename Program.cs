@@ -22,8 +22,7 @@ Env.Load();
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
 var frontendUrls = (
-    Environment.GetEnvironmentVariable("FRONTEND_URLS")
-    ?? "http://localhost:5173"
+    "https://projectportal-4n8z.onrender.com"
 ).Split(
     ',',
     StringSplitOptions.RemoveEmptyEntries |
