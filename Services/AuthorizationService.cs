@@ -10,17 +10,27 @@ public class AuthorizationService
 
     public AuthorizationService(AppDbContext context)
     {
-        _enforcer = new Enforcer("Casbin/model.conf");
+        var modelPath = System.IO.Path.Combine(
+            AppContext.BaseDirectory,
+            "Casbin",
+            "model.conf");
+
+        if (!System.IO.File.Exists(modelPath))
+        {
+            throw new System.IO.FileNotFoundException(
+                $"Casbin model file was not found at: {modelPath}",
+                modelPath);
+        }
+
+        _enforcer = new Enforcer(modelPath);
         LoadPolicies(context);
     }
-    
-    private void LoadPolicies(
-        AppDbContext context)
+
+    private void LoadPolicies(AppDbContext context)
     {
-        var rules =
-            context.CasbinRules
-                .AsNoTracking()
-                .ToList();
+        var rules = context.CasbinRules
+            .AsNoTracking()
+            .ToList();
 
         foreach (var rule in rules)
         {
@@ -31,8 +41,7 @@ public class AuthorizationService
                     rule.V1,
                     rule.V2);
             }
-
-            if (rule.PType == "g")
+            else if (rule.PType == "g")
             {
                 _enforcer.AddGroupingPolicy(
                     rule.V0,
@@ -51,5 +60,4 @@ public class AuthorizationService
             resource,
             action);
     }
-    
 }
