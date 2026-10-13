@@ -15,8 +15,7 @@ public class UserController(
 {
     [HttpPost]
     [CasbinAuthorize("User", "Create")]
-    public async Task<IActionResult> CreateUser(
-        CreateUserDto dto)
+    public async Task<IActionResult> CreateUser(CreateUserDto dto)
     {
         try
         {
@@ -39,15 +38,33 @@ public class UserController(
         int id,
         UpdateUserDto dto)
     {
-        await userService.UpdateAsync(id, dto);
-        return NoContent();
+        try
+        {
+            await userService.UpdateAsync(id, dto);
+            return NoContent();
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
 
     [HttpDelete("{id}")]
     [CasbinAuthorize("User", "Delete")]
     public async Task<IActionResult> DeleteUser(int id)
     {
-        await userService.DeleteAsync(id);
-        return NoContent();
+        try
+        {
+            await userService.DeleteAsync(id);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
 }

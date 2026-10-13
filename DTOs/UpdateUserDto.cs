@@ -9,5 +9,9 @@ public class UpdateUserDto
     public string Name { get; set; } = string.Empty;
 
     [Required]
+    [RegularExpression(
+        "^(Manager|Employee)$",
+        ErrorMessage = "Role must be either Manager or Employee."
+    )]
     public string Role { get; set; } = string.Empty;
 }

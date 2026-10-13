@@ -16,30 +16,11 @@ public class UserService(
     {
         var name = dto.Name.Trim();
         var email = dto.Email.Trim().ToLowerInvariant();
-        var role = dto.Role.Trim();
+        var role = NormalizeRole(dto.Role);
 
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new ArgumentException("Name is required.");
-        }
-
-        if (role.Equals(
-            "Manager",
-            StringComparison.OrdinalIgnoreCase))
-        {
-            role = "Manager";
-        }
-        else if (role.Equals(
-            "Employee",
-            StringComparison.OrdinalIgnoreCase))
-        {
-            role = "Employee";
-        }
-        else
-        {
-            throw new ArgumentException(
-                "New accounts can only be assigned Manager or Employee roles."
-            );
         }
 
         var existingUser = await userRepository.GetByEmailAsync(email);
@@ -76,14 +57,24 @@ public class UserService(
 
     public async Task UpdateAsync(int id, UpdateUserDto dto)
     {
+        var name = dto.Name?.Trim();
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("Name is required.");
+        }
+
+        var role = NormalizeRole(dto.Role);
+
         var user = await userRepository.GetByIdAsync(id);
 
         if (user == null)
         {
-            throw new Exception("User not found");
+            throw new KeyNotFoundException("User not found.");
         }
 
-        mapper.Map(dto, user);
+        user.Name = name;
+        user.Role = role;
 
         await userRepository.UpdateAsync(user);
     }
@@ -94,7 +85,7 @@ public class UserService(
 
         if (user == null)
         {
-            throw new Exception("User not found");
+            throw new KeyNotFoundException("User not found.");
         }
 
         await userRepository.DeleteAsync(user);
@@ -103,6 +94,29 @@ public class UserService(
     public IQueryable<User> GetAll()
     {
         return userRepository.GetAll();
+    }
+
+    private static string NormalizeRole(string? role)
+    {
+        if (string.Equals(
+            role?.Trim(),
+            "Manager",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            return "Manager";
+        }
+
+        if (string.Equals(
+            role?.Trim(),
+            "Employee",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            return "Employee";
+        }
+
+        throw new ArgumentException(
+            "Role must be either Manager or Employee."
+        );
     }
 
     private static string GenerateTemporaryPassword()
