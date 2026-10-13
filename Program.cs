@@ -148,7 +148,43 @@ app.UseHttpsRedirection();
 app.UseCors("Frontend");
 
 app.UseAuthentication();
+
+app.Use(async (context, next) =>
+{
+    var mustChangePassword = context.User
+        .FindFirst("must_change_password")?.Value;
+
+    var isChangePasswordEndpoint =
+        HttpMethods.IsPost(context.Request.Method) &&
+        context.Request.Path.Equals(
+            "/api/auth/change-password",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    if (context.User.Identity?.IsAuthenticated == true &&
+        string.Equals(
+            mustChangePassword,
+            "true",
+            StringComparison.OrdinalIgnoreCase
+        ) &&
+        !isChangePasswordEndpoint)
+    {
+        context.Response.StatusCode =
+            StatusCodes.Status403Forbidden;
+
+        await context.Response.WriteAsJsonAsync(new
+        {
+            message = "You must change your temporary password before continuing."
+        });
+
+        return;
+    }
+
+    await next();
+});
+
 app.UseAuthorization();
+
 
 app.MapControllers();
 app.MapGraphQL();

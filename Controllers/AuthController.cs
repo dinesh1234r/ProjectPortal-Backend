@@ -1,8 +1,9 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectPortal.Data;
 using ProjectPortal.DTOs;
-using ProjectPortal.Models;
 using ProjectPortal.Services;
 
 namespace ProjectPortal.Controllers;
@@ -14,61 +15,32 @@ public class AuthController(
     JwtService jwtService
 ) : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterDto dto)
+    public IActionResult Register()
     {
-        var email = dto.Email.Trim();
-
-        var emailExists = await context.Users
-            .AnyAsync(user => user.Email == email);
-
-        if (emailExists)
-        {
-            return Conflict(new
+        return StatusCode(
+            StatusCodes.Status403Forbidden,
+            new
             {
-                message = "An account with this email already exists."
-            });
-        }
-
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(
-            dto.Password
+                message = "Public registration is disabled. Contact your administrator."
+            }
         );
-
-        var user = new User
-        {
-            Name = dto.Name.Trim(),
-            Email = email,
-            PasswordHash = hashedPassword,
-            Role = "Employee"
-        };
-
-        context.Users.Add(user);
-
-        await context.SaveChangesAsync();
-
-        return Ok(new
-        {
-            message = "User registered successfully"
-        });
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
+        var email = dto.Email.Trim().ToLowerInvariant();
+
         var user = await context.Users
-            .FirstOrDefaultAsync(x => x.Email == dto.Email);
+            .FirstOrDefaultAsync(x => x.Email.ToLower() == email);
 
-        if (user == null)
-        {
-            return Unauthorized("Invalid email or password");
-        }
-
-        var isPasswordValid = BCrypt.Net.BCrypt.Verify(
-            dto.Password,
-            user.PasswordHash
-        );
-
-        if (!isPasswordValid)
+        if (user == null ||
+            !BCrypt.Net.BCrypt.Verify(
+                dto.Password,
+                user.PasswordHash))
         {
             return Unauthorized("Invalid email or password");
         }
@@ -77,7 +49,61 @@ public class AuthController(
 
         return Ok(new
         {
-            token
+            token,
+            mustChangePassword = user.MustChangePassword
+        });
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword(
+        ChangePasswordDto dto)
+    {
+        var userIdValue = User.FindFirstValue(
+            ClaimTypes.NameIdentifier
+        );
+
+        if (!int.TryParse(userIdValue, out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var user = await context.Users
+            .FirstOrDefaultAsync(x => x.Id == userId);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        if (!BCrypt.Net.BCrypt.Verify(
+            dto.CurrentPassword,
+            user.PasswordHash))
+        {
+            return BadRequest(new
+            {
+                message = "Current password is incorrect."
+            });
+        }
+
+        if (dto.CurrentPassword == dto.NewPassword)
+        {
+            return BadRequest(new
+            {
+                message = "Your new password must be different from your current password."
+            });
+        }
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(
+            dto.NewPassword
+        );
+        user.MustChangePassword = false;
+
+        await context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "Password changed successfully. Please log in again."
         });
     }
 }

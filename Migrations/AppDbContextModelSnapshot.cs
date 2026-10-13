@@ -136,6 +136,9 @@ namespace ProjectPortal.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("MustChangePassword")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");

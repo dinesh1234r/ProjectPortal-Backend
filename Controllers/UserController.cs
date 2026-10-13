@@ -18,10 +18,19 @@ public class UserController(
     public async Task<IActionResult> CreateUser(
         CreateUserDto dto)
     {
-        var user =
-            await userService.CreateAsync(dto);
-
-        return Ok(user);
+        try
+        {
+            var result = await userService.CreateAsync(dto);
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
     }
 
     [HttpPut("{id}")]
@@ -31,17 +40,14 @@ public class UserController(
         UpdateUserDto dto)
     {
         await userService.UpdateAsync(id, dto);
-
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     [CasbinAuthorize("User", "Delete")]
-    public async Task<IActionResult> DeleteUser(
-        int id)
+    public async Task<IActionResult> DeleteUser(int id)
     {
         await userService.DeleteAsync(id);
-
         return NoContent();
     }
 }

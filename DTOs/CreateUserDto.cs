@@ -9,6 +9,7 @@ public class CreateUserDto
     public string Name { get; set; } = string.Empty;
 
     [Required]
+    [EmailAddress]
     [MaxLength(101)]
     public string Email { get; set; } = string.Empty;
 
